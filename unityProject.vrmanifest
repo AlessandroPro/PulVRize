@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.lab4.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "C:\\Users\\Alessandro\\Documents\\VR_LABS\\VR_Game\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "Lab4 [Testing]"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{ACBCB5D7-9A9A-95D2-13F4-72620F319C39}|">
+  <MonoDevelop.Ide.ItemProperties.Lab4 PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/LaserPointer.cs">
+    <Files>
+      <File FileName="Assets/Scripts/ObjectGrabber.cs" Line="52" Column="35" />
+      <File FileName="Assets/Scripts/LaserPointer.cs" Line="22" Column="42" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
