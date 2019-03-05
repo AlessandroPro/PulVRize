@@ -174,11 +174,12 @@ public class LaserPointer : MonoBehaviour {
         }
 
         //// Raise column based on controller velocity
-        if(grabbedColumn & angle > 24f)
+        if(grabbedColumn && angle > 24f)
         {
-            if(controllerPose.GetVelocity().y > 3f)
+            if((grabbedColumn.isUpColumn && controllerPose.GetVelocity().y > 3f) ||
+               (!grabbedColumn.isUpColumn && controllerPose.GetVelocity().y < -3f))
             {
-                grabbedColumn.Rise();
+                grabbedColumn.Pulverize();
             }
         }
     }
