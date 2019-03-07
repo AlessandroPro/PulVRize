@@ -143,8 +143,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1860711728259634}
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 7.83, z: 0}
-  m_LocalScale: {x: 1.6, y: 1, z: 1.6}
+  m_LocalPosition: {x: 0, y: 7.19, z: 0}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4535018713038294}
   - {fileID: 4516900886359072}
@@ -213,7 +213,7 @@ Transform:
   m_GameObject: {fileID: 1111670021849698}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -3.57, z: 0}
-  m_LocalScale: {x: 1.6, y: 1, z: 1.6}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4225076623026514}
   - {fileID: 4914600623932642}
@@ -551,7 +551,7 @@ MonoBehaviour:
     m_Bits: 512
   verticalForce: {fileID: 75621911007913552}
   riseForce: {x: 0, y: 8, z: 0}
-  fallForce: {x: 0, y: -15, z: 0}
+  fallForce: {x: 0, y: -30, z: 0}
 --- !u!114 &114176560145511684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -573,5 +573,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   verticalForce: {fileID: 75454632320857166}
-  riseForce: {x: 0, y: 15, z: 0}
+  riseForce: {x: 0, y: 30, z: 0}
   fallForce: {x: 0, y: -8, z: 0}

@@ -182,7 +182,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1058396198081348}
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 7.803, z: 0}
+  m_LocalPosition: {x: 0, y: 7.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4305493367328064}
@@ -551,7 +551,7 @@ MonoBehaviour:
     m_Bits: 512
   verticalForce: {fileID: 75387708616218060}
   riseForce: {x: 0, y: 8, z: 0}
-  fallForce: {x: 0, y: -15, z: 0}
+  fallForce: {x: 0, y: -30, z: 0}
 --- !u!114 &114628679815075144
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -573,5 +573,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   verticalForce: {fileID: 75665761859310326}
-  riseForce: {x: 0, y: 15, z: 0}
+  riseForce: {x: 0, y: 30, z: 0}
   fallForce: {x: 0, y: -8, z: 0}

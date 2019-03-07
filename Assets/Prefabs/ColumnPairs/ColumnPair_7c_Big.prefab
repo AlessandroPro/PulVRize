@@ -169,8 +169,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1504460515927192}
   m_LocalRotation: {x: 0.7071068, y: 0, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 7.803, z: 0}
-  m_LocalScale: {x: 1.6, y: 1, z: 1.6}
+  m_LocalPosition: {x: 0, y: 7.19, z: 0}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4613684863089418}
   - {fileID: 4166502805225160}
@@ -213,7 +213,7 @@ Transform:
   m_GameObject: {fileID: 1685580626329066}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -3.57, z: 0}
-  m_LocalScale: {x: 1.6, y: 1, z: 1.6}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4576833074914484}
   - {fileID: 4139337328016250}
@@ -543,11 +543,15 @@ MonoBehaviour:
   selected: 0
   moving: 0
   isUpColumn: 0
+  isColliding: 0
   shaft: {fileID: 0}
   platform: {fileID: 1900579758437474}
+  columnMask:
+    serializedVersion: 2
+    m_Bits: 0
   verticalForce: {fileID: 75829046559707218}
   riseForce: {x: 0, y: 8, z: 0}
-  fallForce: {x: 0, y: -15, z: 0}
+  fallForce: {x: 0, y: -30, z: 0}
 --- !u!114 &114694710294872088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -562,8 +566,12 @@ MonoBehaviour:
   selected: 0
   moving: 0
   isUpColumn: 1
+  isColliding: 0
   shaft: {fileID: 0}
   platform: {fileID: 1894965988571566}
+  columnMask:
+    serializedVersion: 2
+    m_Bits: 0
   verticalForce: {fileID: 75746883292457762}
-  riseForce: {x: 0, y: 15, z: 0}
+  riseForce: {x: 0, y: 30, z: 0}
   fallForce: {x: 0, y: -8, z: 0}

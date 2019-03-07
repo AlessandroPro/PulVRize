@@ -20,13 +20,18 @@ public class LaserPointer : MonoBehaviour {
     private Vector3 xVector;
     private Vector3 yVector;
     private GameObject[] projectiles;
-    private Vector3 connectedPoint;
-    private Vector3 handForward;
-    private Vector3 handlaunchPoint;
+    private Vector3 connectToPoint;
+    private Vector3 connectFromPoint;
+    private Vector3 columnHitOffset;
+    //private Vector3 handForward;
+   // private Vector3 handlaunchPoint;
+
 
     public LayerMask columnMask;
     public ColumnBehaviour selectedColumn;
     public ColumnBehaviour grabbedColumn;
+
+    public float handTime;
     
 
     // Use this for initialization
@@ -34,8 +39,9 @@ public class LaserPointer : MonoBehaviour {
     {
         laser.enabled = true;
         hitPoint = transform.forward * 100;
+        handTime = 0;
 
-        connectedPoint = new Vector3(0, 0, 0);
+        connectToPoint = transform.position;
 
         projectiles = new GameObject[numPoints];
         for (int i = 0; i < projectiles.Length; i++)
@@ -44,7 +50,7 @@ public class LaserPointer : MonoBehaviour {
         }
 
         hand = Instantiate(hand);
-        handForward = new Vector3(0, 0, 0);
+        //handForward = new Vector3(0, 0, 0);
     }
 	
 	// Update is called once per frame
@@ -83,18 +89,35 @@ public class LaserPointer : MonoBehaviour {
             }
         }
 
-        if (selectedColumn & grabAction.GetStateDown(handType))
+        if (selectedColumn && grabAction.GetStateDown(handType))
         {
             grabbedColumn = selectedColumn;
+            columnHitOffset = hitPoint - grabbedColumn.transform.position;
+            connectFromPoint = transform.position;
+            handTime = 0;
+
+
+        }
+        else if(grabAction.GetStateUp(handType))
+        {
+            grabbedColumn = null;
+            connectFromPoint = hand.transform.position;
+            handTime = 0;
         }
 
         if(grabbedColumn)
         {
-            connectedPoint = grabbedColumn.platform.transform.position;
+            //connectToPoint = grabbedColumn.platform.transform.position;
+            connectToPoint = grabbedColumn.transform.position + columnHitOffset;
+        }
+        else
+        {
+            connectToPoint = transform.position;
         }
 
         UpdateLaser();
         UpdateConnectionLine();
+        handTime += Time.deltaTime * 4f;
 
 
     }
@@ -144,6 +167,7 @@ public class LaserPointer : MonoBehaviour {
 
 
         ////
+        /*
         if (grabAction.GetStateDown(handType))
         {
             hand.transform.position = transform.position;
@@ -159,6 +183,10 @@ public class LaserPointer : MonoBehaviour {
         {
             hand.transform.position += handForward * Time.deltaTime * 25f;
         }
+        */
+
+        hand.transform.position = Vector3.Lerp(connectFromPoint, connectToPoint, handTime);
+
         //////
 
         float timeTotal = 2 * Vo * Mathf.Sin(angle * Mathf.Deg2Rad) / 9.8f;
@@ -173,11 +201,12 @@ public class LaserPointer : MonoBehaviour {
             projectiles[i].transform.position = transform.position + xPos + yPos;
         }
 
-        //// Raise column based on controller velocity
-        if(grabbedColumn && angle > 24f)
+        //// Move column based on controller velocity
+        if(grabbedColumn && angle > 20f)
         {
-            if((grabbedColumn.isUpColumn && controllerPose.GetVelocity().y > 3f) ||
-               (!grabbedColumn.isUpColumn && controllerPose.GetVelocity().y < -3f))
+
+            if((grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y > 2f || controllerPose.GetAngularVelocity().x < -7f)) ||
+               (!grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y < -2f || controllerPose.GetAngularVelocity().x > 7f)))
             {
                 grabbedColumn.Pulverize();
             }
