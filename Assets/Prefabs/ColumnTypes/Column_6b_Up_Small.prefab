@@ -121,7 +121,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9fde011c2503fee46975f809255f507b, type: 2}
+  - {fileID: 2100000, guid: 7e6a6ffadc6c8034e88d498252a08ce8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -278,3 +278,5 @@ MonoBehaviour:
   verticalForce: {fileID: 75876421686045668}
   riseForce: {x: 0, y: 15, z: 0}
   fallForce: {x: 0, y: -8, z: 0}
+  regularMat: {fileID: 0}
+  highlightMat: {fileID: 0}

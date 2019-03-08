@@ -718,7 +718,7 @@ MonoBehaviour:
   moving: 0
   isUpColumn: 0
   isColliding: 0
-  shaft: {fileID: 0}
+  shaft: {fileID: 1545541208686314}
   platform: {fileID: 1888791064678240}
   columnMask:
     serializedVersion: 2
@@ -726,6 +726,8 @@ MonoBehaviour:
   verticalForce: {fileID: 75824039518748330}
   riseForce: {x: 0, y: 8, z: 0}
   fallForce: {x: 0, y: -30, z: 0}
+  regularMat: {fileID: 2100000, guid: 9fde011c2503fee46975f809255f507b, type: 2}
+  highlightMat: {fileID: 2100000, guid: 7e6a6ffadc6c8034e88d498252a08ce8, type: 2}
 --- !u!114 &114521143011925080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -741,7 +743,7 @@ MonoBehaviour:
   moving: 0
   isUpColumn: 1
   isColliding: 0
-  shaft: {fileID: 0}
+  shaft: {fileID: 1906881506430020}
   platform: {fileID: 1138152192139914}
   columnMask:
     serializedVersion: 2
@@ -749,3 +751,5 @@ MonoBehaviour:
   verticalForce: {fileID: 75067422503919092}
   riseForce: {x: 0, y: 30, z: 0}
   fallForce: {x: 0, y: -8, z: 0}
+  regularMat: {fileID: 2100000, guid: 9fde011c2503fee46975f809255f507b, type: 2}
+  highlightMat: {fileID: 2100000, guid: 7e6a6ffadc6c8034e88d498252a08ce8, type: 2}

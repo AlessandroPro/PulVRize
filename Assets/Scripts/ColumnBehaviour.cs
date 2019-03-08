@@ -16,6 +16,10 @@ public class ColumnBehaviour : MonoBehaviour {
     public Vector3 riseForce;
     public Vector3 fallForce;
     private float initialPosY;
+
+    public Material regularMat;
+    public Material highlightMat;
+
 	// Use this for initialization
 	void Start () {
         selected = false;
@@ -113,5 +117,15 @@ public class ColumnBehaviour : MonoBehaviour {
         {
             isColliding = false;
         }
+    }
+
+    public void Highlight()
+    {
+        shaft.GetComponent<MeshRenderer>().material = highlightMat;
+    }
+
+    public void RemoveHighlight()
+    {
+        shaft.GetComponent<MeshRenderer>().material = regularMat;
     }
 }

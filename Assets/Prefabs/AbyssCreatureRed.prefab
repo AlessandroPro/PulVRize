@@ -756,10 +756,15 @@ MonoBehaviour:
   columnMask:
     serializedVersion: 2
     m_Bits: 512
+  forceFieldMask:
+    serializedVersion: 2
+    m_Bits: 1024
   explosionPrefab: {fileID: 1220623748056708, guid: cde0d95941d449c4ba42df6139279acc,
     type: 2}
   playerPos: {fileID: 0}
   speed: 0
+  maxHeight: 0
+  minHeight: 0
 --- !u!135 &135539514556858288
 SphereCollider:
   m_ObjectHideFlags: 1

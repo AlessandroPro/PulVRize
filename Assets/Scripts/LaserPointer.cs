@@ -9,22 +9,26 @@ public class LaserPointer : MonoBehaviour {
     public SteamVR_Input_Sources handType;
     public SteamVR_Behaviour_Pose controllerPose;
     public SteamVR_Action_Boolean grabAction;
+    public SteamVR_Action_Boolean shootAction;
 
     public LineRenderer laser;
     private Vector3 hitPoint;
 
+    public GameObject segmentPrefab;
+    public GameObject handPrefab;
     public GameObject projectilePrefab;
-    public GameObject hand;
-    public int numPoints = 120;
+    public int numPoints = 60;
 
     private Vector3 xVector;
     private Vector3 yVector;
-    private GameObject[] projectiles;
+    private GameObject[] segments;
+    private GameObject hand;
     private Vector3 connectToPoint;
     private Vector3 connectFromPoint;
     private Vector3 columnHitOffset;
     //private Vector3 handForward;
-   // private Vector3 handlaunchPoint;
+    // private Vector3 handlaunchPoint;
+    
 
 
     public LayerMask columnMask;
@@ -43,14 +47,13 @@ public class LaserPointer : MonoBehaviour {
 
         connectToPoint = transform.position;
 
-        projectiles = new GameObject[numPoints];
-        for (int i = 0; i < projectiles.Length; i++)
+        segments = new GameObject[numPoints];
+        for (int i = 0; i < segments.Length; i++)
         {
-            projectiles[i] = Instantiate(projectilePrefab);
+            segments[i] = Instantiate(segmentPrefab);
         }
 
-        hand = Instantiate(hand);
-        //handForward = new Vector3(0, 0, 0);
+        hand = Instantiate(handPrefab);
     }
 	
 	// Update is called once per frame
@@ -115,6 +118,11 @@ public class LaserPointer : MonoBehaviour {
             connectToPoint = transform.position;
         }
 
+        if(shootAction.GetStateDown(handType))
+        {
+            Shoot();
+        }
+
         UpdateLaser();
         UpdateConnectionLine();
         handTime += Time.deltaTime * 4f;
@@ -131,12 +139,17 @@ public class LaserPointer : MonoBehaviour {
     private void SelectColumn(GameObject column)
     {
         selectedColumn = column.GetComponent<ColumnBehaviour>();
-        selectedColumn.selected = true;
+        //selectedColumn.selected = true;
+        selectedColumn.Highlight();
     }
 
     private void DeselectColumn()
     {
-        selectedColumn.selected = false;
+        //selectedColumn.selected = false;
+        if (selectedColumn)
+        {
+            selectedColumn.RemoveHighlight();
+        }
         selectedColumn = null;
     }
 
@@ -190,15 +203,15 @@ public class LaserPointer : MonoBehaviour {
         //////
 
         float timeTotal = 2 * Vo * Mathf.Sin(angle * Mathf.Deg2Rad) / 9.8f;
-        float interval = timeTotal / projectiles.Length;
-        for (int i = 0; i < projectiles.Length; i++)
+        float interval = timeTotal / segments.Length;
+        for (int i = 0; i < segments.Length; i++)
         {
             float time = interval * i;
 
             Vector3 xPos = xVector * Vx * time;
             Vector3 yPos = yVector * (Vy * time - 0.5f * 9.8f * time * time);
 
-            projectiles[i].transform.position = transform.position + xPos + yPos;
+            segments[i].transform.position = transform.position + xPos + yPos;
         }
 
         //// Move column based on controller velocity
@@ -211,6 +224,11 @@ public class LaserPointer : MonoBehaviour {
                 grabbedColumn.Pulverize();
             }
         }
+    }
+
+    private void Shoot()
+    {
+        Instantiate(projectilePrefab, transform.position, transform.rotation);
     }
     
 }
