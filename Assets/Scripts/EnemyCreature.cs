@@ -7,11 +7,12 @@ public class EnemyCreature : MonoBehaviour {
     public LayerMask columnMask;
     public LayerMask forceFieldMask;
     public GameObject explosionPrefab;
+    public GameObject soulPrefab;
     public Transform playerPos;
     private Vector3 target;
     private Animator anim;
 
-    private GameObject stuckColumn;
+    private ColumnBehaviour stuckColumn;
     private float yDiff;
     private bool isDestroyed;
     public float speed;
@@ -27,7 +28,7 @@ public class EnemyCreature : MonoBehaviour {
 	void Start ()
     {
         isDestroyed = false;
-        speed = Random.Range(0.2f, 0.7f);
+        speed = Random.Range(0.1f, 0.5f);
 
         float targetX = playerPos.position.x + Random.Range(-5, 5);
         float targetY = playerPos.position.y + Random.Range(0, 3f);
@@ -43,6 +44,13 @@ public class EnemyCreature : MonoBehaviour {
         pushAwaySpeed = 10f;
         pushAwayDir = Vector3.zero;
         pushHitpoint = Vector3.zero;
+
+        if (null != anim)
+        {
+            // Randomly selects idle animation
+            int idleMode = Random.Range(1, 3);
+            anim.SetInteger("IdleMode", idleMode);
+        }
     }
 	
 	// Update is called once per frame
@@ -77,7 +85,6 @@ public class EnemyCreature : MonoBehaviour {
             if (null != anim)
             {
                 anim.SetBool("AttackMode", true);
-                Debug.Log("HELP");
             }
         }
 
@@ -107,16 +114,16 @@ public class EnemyCreature : MonoBehaviour {
         {
             if (stuckColumn && !isDestroyed)
             {
-                DestroySelf();
+                DestroySelf(stuckColumn.movedBySource);
             }
             else
             {
-                if (Physics.Raycast(transform.position, Vector3.down, 1, columnMask) ||
-                    Physics.Raycast(transform.position, Vector3.up, 1, columnMask))
-                {
-                    stuckColumn = other.gameObject;
+                //if (Physics.Raycast(transform.position, Vector3.down, 1, columnMask) ||
+                //    Physics.Raycast(transform.position, Vector3.up, 1, columnMask))
+                //{
+                    stuckColumn = other.gameObject.GetComponent<ColumnBehaviour>();
                     yDiff = transform.position.y - stuckColumn.transform.position.y;
-                }
+                //}
             }
         }
         else if (((1 << other.gameObject.layer) & forceFieldMask) != 0)
@@ -124,13 +131,19 @@ public class EnemyCreature : MonoBehaviour {
             pushedAway = true;
             pushHitpoint = other.gameObject.transform.position;
             pushAwayDir = other.gameObject.transform.parent.transform.forward;
+            if (null != anim)
+            {
+                anim.SetTrigger("ForceFieldHit");
+            }
         }
     }
 
 
-    private void DestroySelf()
+    private void DestroySelf(Transform soulTarget)
     {
         Instantiate(explosionPrefab, transform.position, transform.rotation);
+        GameObject soul = Instantiate(soulPrefab, transform.position, transform.rotation);
+        soul.GetComponent<SoulBehaviour>().target = soulTarget;
         isDestroyed = true;
         Destroy(this.gameObject);
     }

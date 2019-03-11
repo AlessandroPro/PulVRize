@@ -15,7 +15,7 @@ public class HordeBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        maxEnemies = 40;
+        maxEnemies = 30;
         numEnemies = 0;
         spawnRate = 2;
         StartCoroutine(SpawnEnemy());
@@ -35,7 +35,7 @@ public class HordeBehaviour : MonoBehaviour {
             {
                 float randX = Random.Range(-20f, 20f);
                 float randY = Random.Range(0.4f, 3.03f);
-                Vector3 pos = new Vector3(randX, randY, 15);
+                Vector3 pos = new Vector3(randX, randY, 12);
                 Quaternion rot = Quaternion.identity;
                 GameObject newEnemy = Instantiate(enemyPrefab, transform);
                 newEnemy.transform.position = pos;

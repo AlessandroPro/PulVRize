@@ -761,6 +761,7 @@ MonoBehaviour:
     m_Bits: 1024
   explosionPrefab: {fileID: 1220623748056708, guid: cde0d95941d449c4ba42df6139279acc,
     type: 2}
+  soulPrefab: {fileID: 1684520156639200, guid: feeee58904e2c7b4ab32f957b566589f, type: 2}
   playerPos: {fileID: 0}
   speed: 0
   maxHeight: 0

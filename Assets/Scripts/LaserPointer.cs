@@ -4,7 +4,8 @@ using UnityEngine;
 
 using Valve.VR;
 
-public class LaserPointer : MonoBehaviour {
+public class LaserPointer : MonoBehaviour
+{
 
     public SteamVR_Input_Sources handType;
     public SteamVR_Behaviour_Pose controllerPose;
@@ -28,7 +29,7 @@ public class LaserPointer : MonoBehaviour {
     private Vector3 columnHitOffset;
     //private Vector3 handForward;
     // private Vector3 handlaunchPoint;
-    
+
 
 
     public LayerMask columnMask;
@@ -36,10 +37,12 @@ public class LaserPointer : MonoBehaviour {
     public ColumnBehaviour grabbedColumn;
 
     public float handTime;
-    
+
+    public LayerMask soulMask;
+    private int numSouls;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         laser.enabled = true;
         hitPoint = transform.forward * 100;
@@ -54,10 +57,11 @@ public class LaserPointer : MonoBehaviour {
         }
 
         hand = Instantiate(handPrefab);
+        numSouls = 0;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         RaycastHit hit;
 
@@ -86,7 +90,7 @@ public class LaserPointer : MonoBehaviour {
         else
         {
             hitPoint = transform.forward * 100;
-            if(selectedColumn != null)
+            if (selectedColumn != null)
             {
                 DeselectColumn();
             }
@@ -101,14 +105,14 @@ public class LaserPointer : MonoBehaviour {
 
 
         }
-        else if(grabAction.GetStateUp(handType))
+        else if (grabAction.GetStateUp(handType))
         {
             grabbedColumn = null;
             connectFromPoint = hand.transform.position;
             handTime = 0;
         }
 
-        if(grabbedColumn)
+        if (grabbedColumn)
         {
             //connectToPoint = grabbedColumn.platform.transform.position;
             connectToPoint = grabbedColumn.transform.position + columnHitOffset;
@@ -118,7 +122,7 @@ public class LaserPointer : MonoBehaviour {
             connectToPoint = transform.position;
         }
 
-        if(shootAction.GetStateDown(handType))
+        if (shootAction.GetStateDown(handType))
         {
             Shoot();
         }
@@ -131,7 +135,7 @@ public class LaserPointer : MonoBehaviour {
     }
 
     private void UpdateLaser()
-    { 
+    {
         laser.SetPosition(0, transform.position);
         laser.SetPosition(1, hitPoint);
     }
@@ -215,20 +219,41 @@ public class LaserPointer : MonoBehaviour {
         }
 
         //// Move column based on controller velocity
-        if(grabbedColumn && angle > 20f)
+        if (grabbedColumn && angle > 20f)
         {
 
-            if((grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y > 2f || controllerPose.GetAngularVelocity().x < -7f)) ||
+            if ((grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y > 2f || controllerPose.GetAngularVelocity().x < -7f)) ||
                (!grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y < -2f || controllerPose.GetAngularVelocity().x > 7f)))
             {
                 grabbedColumn.Pulverize();
+                grabbedColumn.movedBySource = transform;
             }
         }
     }
 
     private void Shoot()
     {
-        Instantiate(projectilePrefab, transform.position, transform.rotation);
+        if (numSouls > 0)
+        {
+            Instantiate(projectilePrefab, transform.position, transform.rotation);
+            numSouls--;
+        }
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (((1 << other.gameObject.layer) & soulMask) != 0)
+        {
+            CollectSoul(other.gameObject);
+        }
+    }
+
+    private void CollectSoul(GameObject soul)
+    {
+        var ps = soul.GetComponent<ParticleSystem>();
+        ps.Stop();
+        var main = ps.main;
+        main.stopAction = ParticleSystemStopAction.Destroy;
+        numSouls++;
+    }
 }

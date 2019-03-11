@@ -16,6 +16,7 @@ public class ColumnBehaviour : MonoBehaviour {
     public Vector3 riseForce;
     public Vector3 fallForce;
     private float initialPosY;
+    public Transform movedBySource;
 
     public Material regularMat;
     public Material highlightMat;

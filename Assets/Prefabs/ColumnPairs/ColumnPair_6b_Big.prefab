@@ -552,6 +552,7 @@ MonoBehaviour:
   verticalForce: {fileID: 75621911007913552}
   riseForce: {x: 0, y: 8, z: 0}
   fallForce: {x: 0, y: -30, z: 0}
+  movedBySource: {fileID: 0}
   regularMat: {fileID: 2100000, guid: 9fde011c2503fee46975f809255f507b, type: 2}
   highlightMat: {fileID: 2100000, guid: 7e6a6ffadc6c8034e88d498252a08ce8, type: 2}
 --- !u!114 &114176560145511684
@@ -577,5 +578,6 @@ MonoBehaviour:
   verticalForce: {fileID: 75454632320857166}
   riseForce: {x: 0, y: 30, z: 0}
   fallForce: {x: 0, y: -8, z: 0}
+  movedBySource: {fileID: 0}
   regularMat: {fileID: 2100000, guid: 9fde011c2503fee46975f809255f507b, type: 2}
   highlightMat: {fileID: 2100000, guid: 7e6a6ffadc6c8034e88d498252a08ce8, type: 2}
