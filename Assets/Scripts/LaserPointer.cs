@@ -18,12 +18,14 @@ public class LaserPointer : MonoBehaviour
     public GameObject segmentPrefab;
     public GameObject handPrefab;
     public GameObject projectilePrefab;
-    public int numPoints = 60;
+    public GameObject grabLightPrefab;
+    public int numPoints = 45;
 
     private Vector3 xVector;
     private Vector3 yVector;
     private GameObject[] segments;
     private GameObject hand;
+    private GameObject grabLight;
     private Vector3 connectToPoint;
     private Vector3 connectFromPoint;
     private Vector3 columnHitOffset;
@@ -57,7 +59,9 @@ public class LaserPointer : MonoBehaviour
         }
 
         hand = Instantiate(handPrefab);
-        numSouls = 0;
+        grabLight = Instantiate(grabLightPrefab);
+        grabLight.SetActive(false);
+        numSouls = 1000;
     }
 
     // Update is called once per frame
@@ -130,6 +134,7 @@ public class LaserPointer : MonoBehaviour
         UpdateLaser();
         UpdateConnectionLine();
         handTime += Time.deltaTime * 4f;
+        grabLight.transform.position = hand.transform.position;
 
 
     }
@@ -159,6 +164,7 @@ public class LaserPointer : MonoBehaviour
 
     private void UpdateConnectionLine()
     {
+        
         xVector = hand.transform.position - transform.position;
 
         float distance = xVector.magnitude;
@@ -219,14 +225,21 @@ public class LaserPointer : MonoBehaviour
         }
 
         //// Move column based on controller velocity
-        if (grabbedColumn && angle > 20f)
-        {
+        grabLight.SetActive(false);
+        if (grabbedColumn)
+        //if (grabbedColumn && angle > 20f)
+            {
 
             if ((grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y > 2f || controllerPose.GetAngularVelocity().x < -7f)) ||
                (!grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y < -2f || controllerPose.GetAngularVelocity().x > 7f)))
             {
                 grabbedColumn.Pulverize();
                 grabbedColumn.movedBySource = transform;
+            }
+
+            if((hand.transform.position - connectToPoint).magnitude < 0.01)
+            {
+                grabLight.SetActive(true);
             }
         }
     }

@@ -552,8 +552,11 @@ MonoBehaviour:
   verticalForce: {fileID: 75992780825730344}
   riseForce: {x: 0, y: 30, z: 0}
   fallForce: {x: 0, y: -8, z: 0}
+  movedBySource: {fileID: 0}
   regularMat: {fileID: 2100000, guid: 9fde011c2503fee46975f809255f507b, type: 2}
   highlightMat: {fileID: 2100000, guid: 7e6a6ffadc6c8034e88d498252a08ce8, type: 2}
+  dustPuffPrefab: {fileID: 1455049192525574, guid: d88c094debdbb63408bdfb8e4d324714,
+    type: 2}
 --- !u!114 &114520943736298716
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -577,5 +580,8 @@ MonoBehaviour:
   verticalForce: {fileID: 75868006525895910}
   riseForce: {x: 0, y: 8, z: 0}
   fallForce: {x: 0, y: -30, z: 0}
+  movedBySource: {fileID: 0}
   regularMat: {fileID: 2100000, guid: 9fde011c2503fee46975f809255f507b, type: 2}
   highlightMat: {fileID: 2100000, guid: 7e6a6ffadc6c8034e88d498252a08ce8, type: 2}
+  dustPuffPrefab: {fileID: 1455049192525574, guid: d88c094debdbb63408bdfb8e4d324714,
+    type: 2}

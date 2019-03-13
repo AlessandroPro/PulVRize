@@ -28,7 +28,7 @@ public class EnemyCreature : MonoBehaviour {
 	void Start ()
     {
         isDestroyed = false;
-        speed = Random.Range(0.1f, 0.5f);
+        speed = Random.Range(0.2f, 0.5f);
 
         float targetX = playerPos.position.x + Random.Range(-5, 5);
         float targetY = playerPos.position.y + Random.Range(0, 3f);

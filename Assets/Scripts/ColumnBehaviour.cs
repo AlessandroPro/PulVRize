@@ -21,6 +21,8 @@ public class ColumnBehaviour : MonoBehaviour {
     public Material regularMat;
     public Material highlightMat;
 
+    public GameObject dustPuffPrefab;
+
 	// Use this for initialization
 	void Start () {
         selected = false;
@@ -109,6 +111,7 @@ public class ColumnBehaviour : MonoBehaviour {
             }
 
             isColliding = true;
+            Instantiate(dustPuffPrefab, platform.transform.position, dustPuffPrefab.transform.rotation);
         }
     }
 

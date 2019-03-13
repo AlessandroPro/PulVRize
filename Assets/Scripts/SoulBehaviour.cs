@@ -23,9 +23,9 @@ public class SoulBehaviour : MonoBehaviour {
         if (target)
         {
             targetPoint = target.position;
-            transform.position += transform.forward * Time.deltaTime * forwardSpeed;
-            Quaternion q = Quaternion.LookRotation(targetPoint - transform.position);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed * Time.deltaTime);
         }
+        transform.position += transform.forward * Time.deltaTime * forwardSpeed;
+        Quaternion q = Quaternion.LookRotation(targetPoint - transform.position);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed * Time.deltaTime);
     }
 }

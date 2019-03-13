@@ -8,16 +8,19 @@ public class HordeBehaviour : MonoBehaviour {
     public int numEnemies;
     private float spawnRate;
 
-    public GameObject enemyPrefab;
+    //public GameObject redEnemyPrefab;
+    //public GameObject darkEnemyPrefab;
     public Transform playerPos;
-   
+
+    public GameObject[] enemyPrefabs;
 
 	// Use this for initialization
 	void Start ()
     {
-        maxEnemies = 30;
+        maxEnemies = 40;
         numEnemies = 0;
         spawnRate = 2;
+        
         StartCoroutine(SpawnEnemy());
 	}
 	
@@ -37,7 +40,9 @@ public class HordeBehaviour : MonoBehaviour {
                 float randY = Random.Range(0.4f, 3.03f);
                 Vector3 pos = new Vector3(randX, randY, 12);
                 Quaternion rot = Quaternion.identity;
-                GameObject newEnemy = Instantiate(enemyPrefab, transform);
+
+                int enemyType = Random.Range(0, enemyPrefabs.Length);
+                GameObject newEnemy = Instantiate(enemyPrefabs[enemyType], transform);
                 newEnemy.transform.position = pos;
                 newEnemy.GetComponent<EnemyCreature>().playerPos = playerPos;
             }
