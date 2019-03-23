@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 using Valve.VR;
 
@@ -19,13 +20,15 @@ public class LaserPointer : MonoBehaviour
     public GameObject handPrefab;
     public GameObject projectilePrefab;
     public GameObject grabLightPrefab;
-    public int numPoints = 45;
+    private int numPoints = 100;
 
     private Vector3 xVector;
     private Vector3 yVector;
     private GameObject[] segments;
     private GameObject hand;
     private GameObject grabLight;
+    public GameObject soulRing;
+    private ParticleSystem soulRingParticles;
     private Vector3 connectToPoint;
     private Vector3 connectFromPoint;
     private Vector3 columnHitOffset;
@@ -42,6 +45,8 @@ public class LaserPointer : MonoBehaviour
 
     public LayerMask soulMask;
     private int numSouls;
+    private int numDefeated;
+    public Text score;
 
     // Use this for initialization
     void Start()
@@ -49,6 +54,7 @@ public class LaserPointer : MonoBehaviour
         laser.enabled = true;
         hitPoint = transform.forward * 100;
         handTime = 0;
+        numDefeated = 0;
 
         connectToPoint = transform.position;
 
@@ -61,12 +67,29 @@ public class LaserPointer : MonoBehaviour
         hand = Instantiate(handPrefab);
         grabLight = Instantiate(grabLightPrefab);
         grabLight.SetActive(false);
-        numSouls = 1000;
+        numSouls = 5;
+
+        soulRingParticles = soulRing.GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        soulRing.transform.RotateAround(transform.position, transform.forward, 5);
+
+        if (handType == SteamVR_Input_Sources.LeftHand)
+        {
+            score.text = numDefeated.ToString();
+        }
+        else
+        {
+            double minutes = Mathf.Floor(Time.time / 60);
+            double seconds = Time.time % 60;
+
+            score.text = System.Math.Round(minutes).ToString() + ":" + System.Math.Round(seconds).ToString();
+        }
+
+
         RaycastHit hit;
 
         if (Physics.Raycast(controllerPose.transform.position, transform.forward, out hit, Mathf.Infinity, columnMask))
@@ -164,7 +187,7 @@ public class LaserPointer : MonoBehaviour
 
     private void UpdateConnectionLine()
     {
-        
+        /*
         xVector = hand.transform.position - transform.position;
 
         float distance = xVector.magnitude;
@@ -189,6 +212,18 @@ public class LaserPointer : MonoBehaviour
         float Vy = Vo * Mathf.Sin(angle * Mathf.Deg2Rad);
 
 
+        float timeTotal = 2 * Vo * Mathf.Sin(angle * Mathf.Deg2Rad) / 9.8f;
+        float interval = timeTotal / segments.Length;
+        for (int i = 0; i < segments.Length; i++)
+        {
+            float time = interval * i;
+
+            Vector3 xPos = xVector * Vx * time;
+            Vector3 yPos = yVector * (Vy * time - 0.5f * 9.8f * time * time);
+
+            segments[i].transform.position = transform.position + xPos + yPos;
+        }
+        */
         ////
         /*
         if (grabAction.GetStateDown(handType))
@@ -208,30 +243,62 @@ public class LaserPointer : MonoBehaviour
         }
         */
 
+        ///// Bezier curve /////
+
+        Vector3 cp1 = transform.position;
+        Vector3 cp3 = hand.transform.position;
+
+        xVector = cp3 - cp1;
+        Vector3 hypVector = transform.forward;
+        float angle = Vector3.Angle(xVector, hypVector);
+
+        if (angle >= 45f)
+        {
+            angle = 45f;
+            hypVector = Vector3.RotateTowards(xVector, transform.forward, Mathf.Deg2Rad * angle, 0);
+            hypVector.Normalize();
+        }
+
+        float x = xVector.magnitude / 2f;
+        float z = x / Mathf.Cos(Mathf.Deg2Rad * angle);
+
+        Vector3 cp2 = cp1 + (z * hypVector);
+
+        float interval = 1f / segments.Length;
+        float t = 0;
+
+        Vector3 b12, b23;
+        for (int i = 0; i < segments.Length; i++)
+        {
+            b12 = Vector3.Lerp(cp1, cp2, t);
+            b23 = Vector3.Lerp(cp2, cp3, t);
+
+            segments[i].transform.position = Vector3.Lerp(b12, b23, t);
+            t += interval;
+        }
+
+
+
         hand.transform.position = Vector3.Lerp(connectFromPoint, connectToPoint, handTime);
 
         //////
 
-        float timeTotal = 2 * Vo * Mathf.Sin(angle * Mathf.Deg2Rad) / 9.8f;
-        float interval = timeTotal / segments.Length;
-        for (int i = 0; i < segments.Length; i++)
-        {
-            float time = interval * i;
 
-            Vector3 xPos = xVector * Vx * time;
-            Vector3 yPos = yVector * (Vy * time - 0.5f * 9.8f * time * time);
-
-            segments[i].transform.position = transform.position + xPos + yPos;
-        }
 
         //// Move column based on controller velocity
         grabLight.SetActive(false);
         if (grabbedColumn)
+   
         //if (grabbedColumn && angle > 20f)
             {
+            //float maxVelocity = 2;
+            //float maxAngVelocity = 7;
 
-            if ((grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y > 2f || controllerPose.GetAngularVelocity().x < -7f)) ||
-               (!grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y < -2f || controllerPose.GetAngularVelocity().x > 7f)))
+            float maxVelocity = 1;
+            float maxAngVelocity = 4;
+
+            if ((grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y > maxVelocity || controllerPose.GetAngularVelocity().x < -maxAngVelocity)) ||
+               (!grabbedColumn.isUpColumn && (controllerPose.GetVelocity().y < -maxVelocity || controllerPose.GetAngularVelocity().x > maxAngVelocity)))
             {
                 grabbedColumn.Pulverize();
                 grabbedColumn.movedBySource = transform;
@@ -251,6 +318,8 @@ public class LaserPointer : MonoBehaviour
             Instantiate(projectilePrefab, transform.position, transform.rotation);
             numSouls--;
         }
+        var emission = soulRingParticles.emission;
+        emission.rateOverTime = numSouls;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -268,5 +337,9 @@ public class LaserPointer : MonoBehaviour
         var main = ps.main;
         main.stopAction = ParticleSystemStopAction.Destroy;
         numSouls++;
+        numDefeated++;
+
+        var emission = soulRingParticles.emission;
+        emission.rateOverTime = numSouls;
     }
 }

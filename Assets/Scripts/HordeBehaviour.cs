@@ -19,7 +19,7 @@ public class HordeBehaviour : MonoBehaviour {
     {
         maxEnemies = 40;
         numEnemies = 0;
-        spawnRate = 2;
+        spawnRate = 2f;
         
         StartCoroutine(SpawnEnemy());
 	}

@@ -28,7 +28,7 @@ public class EnemyCreature : MonoBehaviour {
 	void Start ()
     {
         isDestroyed = false;
-        speed = Random.Range(0.2f, 0.5f);
+        speed = Random.Range(0.2f, 0.9f);
 
         float targetX = playerPos.position.x + Random.Range(-5, 5);
         float targetY = playerPos.position.y + Random.Range(0, 3f);
@@ -37,8 +37,11 @@ public class EnemyCreature : MonoBehaviour {
 
         anim = GetComponent<Animator>();
 
-        minHeight = 0.4f;
-        maxHeight = 3.03f;
+        minHeight = 0.67f;
+        maxHeight = 2.75f;
+
+        //minHeight = 0.4f;
+        //maxHeight = 3.03f;
 
         pushedAway = false;
         pushAwaySpeed = 10f;

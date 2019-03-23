@@ -122,7 +122,10 @@ namespace Valve.VR
                 MeshRenderer renderer = meshRenderers[rendererIndex];
 
                 if (renderer != null)
+                {
                     renderer.enabled = state;
+                }
+
             }
         }
 
