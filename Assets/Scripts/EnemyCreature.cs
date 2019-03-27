@@ -11,6 +11,7 @@ public class EnemyCreature : MonoBehaviour {
     public Transform playerPos;
     private Vector3 target;
     private Animator anim;
+    public Rigidbody body;
 
     private ColumnBehaviour stuckColumn;
     private float yDiff;
@@ -21,6 +22,7 @@ public class EnemyCreature : MonoBehaviour {
     public float minHeight;
 
     private bool pushedAway;
+    private bool hitColumnSide;
     private float pushAwaySpeed;
     private Vector3 pushAwayDir;
     private Vector3 pushHitpoint;
@@ -28,7 +30,7 @@ public class EnemyCreature : MonoBehaviour {
 	void Start ()
     {
         isDestroyed = false;
-        speed = Random.Range(0.2f, 0.9f);
+        speed = Random.Range(0.2f, 0.6f);
 
         float targetX = playerPos.position.x + Random.Range(-5, 5);
         float targetY = playerPos.position.y + Random.Range(0, 3f);
@@ -44,6 +46,7 @@ public class EnemyCreature : MonoBehaviour {
         //maxHeight = 3.03f;
 
         pushedAway = false;
+        hitColumnSide = false;
         pushAwaySpeed = 10f;
         pushAwayDir = Vector3.zero;
         pushHitpoint = Vector3.zero;
@@ -75,9 +78,12 @@ public class EnemyCreature : MonoBehaviour {
         {
             transform.position += pushAwayDir * Time.deltaTime * pushAwaySpeed;
         }
-        else if(distanceToPlayer > 0.5)
+        else if(distanceToPlayer > 1.2)
         {
-            transform.position += transform.forward * Time.deltaTime * speed;
+            if(!hitColumnSide)
+            {
+                transform.position += transform.forward * Time.deltaTime * speed;
+            }
             Quaternion q = Quaternion.LookRotation(target - transform.position);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 30 * Time.deltaTime);
         }
@@ -111,6 +117,14 @@ public class EnemyCreature : MonoBehaviour {
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (body.velocity.magnitude > 0)
+        {
+            body.velocity = Vector3.zero;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & columnMask) != 0)
@@ -121,15 +135,21 @@ public class EnemyCreature : MonoBehaviour {
             }
             else
             {
-                //if (Physics.Raycast(transform.position, Vector3.down, 1, columnMask) ||
-                //    Physics.Raycast(transform.position, Vector3.up, 1, columnMask))
-                //{
-                    stuckColumn = other.gameObject.GetComponent<ColumnBehaviour>();
+                ColumnBehaviour column = other.gameObject.GetComponent<ColumnBehaviour>();
+                if ((column.isUpColumn && transform.position.y > column.platform.transform.position.y) ||
+                    (!column.isUpColumn && transform.position.y < column.platform.transform.position.y))
+                {
+                    stuckColumn = column;
                     yDiff = transform.position.y - stuckColumn.transform.position.y;
-                //}
+                }
+                else
+                {
+                    hitColumnSide = true;
+                    pushedAway = false;
+                }
             }
         }
-        else if (((1 << other.gameObject.layer) & forceFieldMask) != 0)
+        else if ((((1 << other.gameObject.layer) & forceFieldMask) != 0) && !hitColumnSide)
         {
             pushedAway = true;
             pushHitpoint = other.gameObject.transform.position;
@@ -138,6 +158,15 @@ public class EnemyCreature : MonoBehaviour {
             {
                 anim.SetTrigger("ForceFieldHit");
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (((1 << other.gameObject.layer) & columnMask) != 0)
+        {
+            hitColumnSide = false;
+            stuckColumn = null;
         }
     }
 

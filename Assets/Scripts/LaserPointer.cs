@@ -243,6 +243,8 @@ public class LaserPointer : MonoBehaviour
         }
         */
 
+        hand.transform.position = Vector3.Lerp(connectFromPoint, connectToPoint, handTime);
+
         ///// Bezier curve /////
 
         Vector3 cp1 = transform.position;
@@ -279,7 +281,7 @@ public class LaserPointer : MonoBehaviour
 
 
 
-        hand.transform.position = Vector3.Lerp(connectFromPoint, connectToPoint, handTime);
+        
 
         //////
 

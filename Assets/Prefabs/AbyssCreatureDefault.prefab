@@ -750,7 +750,7 @@ Animator:
   m_GameObject: {fileID: 1814639429987076}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 29e7b311ab38ca144b61cbf70dd1ca22, type: 3}
-  m_Controller: {fileID: 9100000, guid: 3cf282fed7c8c2f42944791a93d354dd, type: 2}
+  m_Controller: {fileID: 9100000, guid: ecfbb3979d65c3f428c2bb20c2ee9c41, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -779,6 +779,7 @@ MonoBehaviour:
     type: 2}
   soulPrefab: {fileID: 1727074340529764, guid: 54b3f57b45ea78c41bb4f4b8bcc9ac30, type: 2}
   playerPos: {fileID: 0}
+  body: {fileID: 54235462311305472}
   speed: 0
   maxHeight: 0
   minHeight: 0
