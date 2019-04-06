@@ -783,6 +783,7 @@ MonoBehaviour:
   speed: 0
   maxHeight: 0
   minHeight: 0
+  isLarge: 1
 --- !u!135 &135257063075837808
 SphereCollider:
   m_ObjectHideFlags: 1

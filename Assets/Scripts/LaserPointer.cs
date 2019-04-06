@@ -12,6 +12,7 @@ public class LaserPointer : MonoBehaviour
     public SteamVR_Behaviour_Pose controllerPose;
     public SteamVR_Action_Boolean grabAction;
     public SteamVR_Action_Boolean shootAction;
+    public SteamVR_Action_Vibration hapticAction;
 
     public LineRenderer laser;
     private Vector3 hitPoint;
@@ -123,30 +124,16 @@ public class LaserPointer : MonoBehaviour
             }
         }
 
-        if (selectedColumn && grabAction.GetStateDown(handType))
+        if (grabAction.GetStateDown(handType))
         {
-            grabbedColumn = selectedColumn;
-            columnHitOffset = hitPoint - grabbedColumn.transform.position;
-            connectFromPoint = transform.position;
-            handTime = 0;
-
-
-        }
-        else if (grabAction.GetStateUp(handType))
-        {
-            grabbedColumn = null;
-            connectFromPoint = hand.transform.position;
-            handTime = 0;
-        }
-
-        if (grabbedColumn)
-        {
-            //connectToPoint = grabbedColumn.platform.transform.position;
-            connectToPoint = grabbedColumn.transform.position + columnHitOffset;
-        }
-        else
-        {
-            connectToPoint = transform.position;
+            if (selectedColumn)
+            {
+                LaunchHand();
+            }
+            else
+            {
+                RetractHand(false);
+            }
         }
 
         if (shootAction.GetStateDown(handType))
@@ -154,12 +141,49 @@ public class LaserPointer : MonoBehaviour
             Shoot();
         }
 
+        UpdateConnectionPoint();
         UpdateLaser();
         UpdateConnectionLine();
-        handTime += Time.deltaTime * 4f;
+        handTime += Time.deltaTime * 5f;
         grabLight.transform.position = hand.transform.position;
 
 
+    }
+
+    private void LaunchHand()
+    {
+        RetractHand(true);
+        grabbedColumn = selectedColumn;
+        columnHitOffset = hitPoint - grabbedColumn.transform.position;
+        connectFromPoint = controllerPose.transform.position;
+        handTime = 0;
+    }
+
+    private void RetractHand(bool instant)
+    {
+        grabbedColumn = null;
+        handTime = 0;
+
+        if(instant)
+        {
+            connectFromPoint = controllerPose.transform.position;
+        }
+        else
+        {
+            connectFromPoint = hand.transform.position; 
+        }
+    }
+
+    private void UpdateConnectionPoint()
+    {
+        if (grabbedColumn)
+        {
+            connectToPoint = grabbedColumn.transform.position + columnHitOffset;
+        }
+        else
+        {
+            connectToPoint = controllerPose.transform.position;
+        }
     }
 
     private void UpdateLaser()
@@ -304,6 +328,8 @@ public class LaserPointer : MonoBehaviour
             {
                 grabbedColumn.Pulverize();
                 grabbedColumn.movedBySource = transform;
+                RetractHand(false);
+                Pulse(0.1f, 50, 75);
             }
 
             if((hand.transform.position - connectToPoint).magnitude < 0.01)
@@ -343,5 +369,10 @@ public class LaserPointer : MonoBehaviour
 
         var emission = soulRingParticles.emission;
         emission.rateOverTime = numSouls;
+    }
+
+    private void Pulse(float duration, float frequency, float amplitude)
+    {
+        hapticAction.Execute(0, duration, frequency, amplitude, handType);
     }
 }

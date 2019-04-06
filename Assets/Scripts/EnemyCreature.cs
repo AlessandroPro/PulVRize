@@ -20,6 +20,7 @@ public class EnemyCreature : MonoBehaviour {
 
     public float maxHeight;
     public float minHeight;
+    public bool isLarge;
 
     private bool pushedAway;
     private bool hitColumnSide;
@@ -39,11 +40,16 @@ public class EnemyCreature : MonoBehaviour {
 
         anim = GetComponent<Animator>();
 
-        minHeight = 0.67f;
-        maxHeight = 2.75f;
-
-        //minHeight = 0.4f;
-        //maxHeight = 3.03f;
+        if(isLarge)
+        {
+            minHeight = 0.67f;
+            maxHeight = 2.75f;
+        }
+        else
+        {
+            minHeight = 0.4f;
+            maxHeight = 3.03f;
+        }
 
         pushedAway = false;
         hitColumnSide = false;
