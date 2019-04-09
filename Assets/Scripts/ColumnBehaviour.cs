@@ -23,8 +23,11 @@ public class ColumnBehaviour : MonoBehaviour {
 
     public GameObject dustPuffPrefab;
 
-	// Use this for initialization
-	void Start () {
+    private AudioSource audioSource;
+    public AudioClip[] clipArray;
+
+    // Use this for initialization
+    void Start () {
         selected = false;
         moving = false;
         isColliding = false;
@@ -32,7 +35,8 @@ public class ColumnBehaviour : MonoBehaviour {
         verticalForce.force = Vector3.zero;
 
         initialPosY = transform.position.y;
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -54,6 +58,15 @@ public class ColumnBehaviour : MonoBehaviour {
         }
 	}
 
+    private void PlaySound(int clipIndex, float delay)
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = clipArray[clipIndex];
+        audioSource.pitch = (Random.Range(0.8f, 1.1f));
+        audioSource.volume = (Random.Range(0.3f, .4f));
+        audioSource.PlayDelayed(delay);
+    }
+
     public void Pulverize()
     {
         if(isUpColumn)
@@ -71,6 +84,7 @@ public class ColumnBehaviour : MonoBehaviour {
     {
         if(!isColliding)
         {
+            PlaySound(0, 0.05f);
             verticalForce.force = Vector3.zero;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
             verticalForce.force = riseForce;
@@ -80,6 +94,7 @@ public class ColumnBehaviour : MonoBehaviour {
 
     private void Fall()
     {
+        PlaySound(1, 0.05f);
         if (!isColliding)
         {
             verticalForce.force = Vector3.zero;

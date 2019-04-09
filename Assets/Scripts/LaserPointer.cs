@@ -33,10 +33,6 @@ public class LaserPointer : MonoBehaviour
     private Vector3 connectToPoint;
     private Vector3 connectFromPoint;
     private Vector3 columnHitOffset;
-    //private Vector3 handForward;
-    // private Vector3 handlaunchPoint;
-
-
 
     public LayerMask columnMask;
     public ColumnBehaviour selectedColumn;
@@ -48,6 +44,9 @@ public class LaserPointer : MonoBehaviour
     private int numSouls;
     private int numDefeated;
     public Text score;
+
+    private AudioSource audioSource;
+    public AudioClip[] clipArray;
 
     // Use this for initialization
     void Start()
@@ -68,9 +67,11 @@ public class LaserPointer : MonoBehaviour
         hand = Instantiate(handPrefab);
         grabLight = Instantiate(grabLightPrefab);
         grabLight.SetActive(false);
-        numSouls = 5;
+        numSouls = 50;
 
         soulRingParticles = soulRing.GetComponent<ParticleSystem>();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -150,6 +151,14 @@ public class LaserPointer : MonoBehaviour
 
     }
 
+    private void PlaySound(int clipIndex, float delay)
+    {
+        audioSource.clip = clipArray[clipIndex];
+        audioSource.pitch = (Random.Range(0.4f, 0.8f));
+        audioSource.volume = (Random.Range(0.2f, .4f));
+        audioSource.PlayDelayed(delay);
+    }
+
     private void LaunchHand()
     {
         RetractHand(true);
@@ -157,6 +166,7 @@ public class LaserPointer : MonoBehaviour
         columnHitOffset = hitPoint - grabbedColumn.transform.position;
         connectFromPoint = controllerPose.transform.position;
         handTime = 0;
+        //PlaySound(0, 0);
     }
 
     private void RetractHand(bool instant)
@@ -332,7 +342,7 @@ public class LaserPointer : MonoBehaviour
                 Pulse(0.1f, 50, 75);
             }
 
-            if((hand.transform.position - connectToPoint).magnitude < 0.01)
+            if ((hand.transform.position - connectToPoint).magnitude < 0.01 && !grabLight.activeSelf)
             {
                 grabLight.SetActive(true);
             }

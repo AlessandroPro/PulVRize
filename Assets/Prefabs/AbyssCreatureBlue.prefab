@@ -39,6 +39,7 @@ GameObject:
   - component: {fileID: 114649177632103990}
   - component: {fileID: 54573250724143024}
   - component: {fileID: 135111893040377032}
+  - component: {fileID: 82266300555351678}
   m_Layer: 0
   m_Name: AbyssCreatureBlue
   m_TagString: Untagged
@@ -741,6 +742,86 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!82 &82266300555351678
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1017579220151940}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!95 &95153343593313862
 Animator:
   serializedVersion: 3
@@ -779,9 +860,19 @@ MonoBehaviour:
     type: 2}
   soulPrefab: {fileID: 1727074340529764, guid: 54b3f57b45ea78c41bb4f4b8bcc9ac30, type: 2}
   playerPos: {fileID: 0}
+  body: {fileID: 0}
   speed: 0
   maxHeight: 0
   minHeight: 0
+  isLarge: 0
+  clipArray:
+  - {fileID: 8300000, guid: 486e476c551d1a240b2f1a9b9ede3d08, type: 3}
+  - {fileID: 8300000, guid: a275a36e31688fb4cb9af8e8db39ccc5, type: 3}
+  - {fileID: 8300000, guid: 2623af5c53ff1ac49a6a79e9aebf6034, type: 3}
+  - {fileID: 8300000, guid: 8be3f11b65a42c84198790ac376024da, type: 3}
+  - {fileID: 8300000, guid: 3141ca578b6b47544a126cd1903b4829, type: 3}
+  - {fileID: 8300000, guid: dc01763ab68bf8a44ba6bb56b00b7af5, type: 3}
+  - {fileID: 8300000, guid: 52ea13e588472634394eae83f068b861, type: 3}
 --- !u!135 &135111893040377032
 SphereCollider:
   m_ObjectHideFlags: 1

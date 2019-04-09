@@ -27,8 +27,11 @@ public class EnemyCreature : MonoBehaviour {
     private float pushAwaySpeed;
     private Vector3 pushAwayDir;
     private Vector3 pushHitpoint;
-	// Use this for initialization
-	void Start ()
+
+    private AudioSource audioSource;
+    public AudioClip[] clipArray;
+    // Use this for initialization
+    void Start ()
     {
         isDestroyed = false;
         speed = Random.Range(0.2f, 0.6f);
@@ -63,6 +66,8 @@ public class EnemyCreature : MonoBehaviour {
             int idleMode = Random.Range(1, 3);
             anim.SetInteger("IdleMode", idleMode);
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
@@ -131,6 +136,18 @@ public class EnemyCreature : MonoBehaviour {
         }
     }
 
+    private void PlaySound(int clipIndex, float delay)
+    {
+        if (clipIndex < clipArray.Length)
+        {
+            audioSource.clip = clipArray[clipIndex];
+            audioSource.pitch = (Random.Range(0.8f, 1.1f));
+            audioSource.volume = (Random.Range(0.3f, .4f));
+            audioSource.PlayDelayed(delay);
+        }
+            
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & columnMask) != 0)
@@ -163,6 +180,7 @@ public class EnemyCreature : MonoBehaviour {
             if (null != anim)
             {
                 anim.SetTrigger("ForceFieldHit");
+                PlaySound(Random.Range(0, clipArray.Length + 5), 0);
             }
         }
     }
