@@ -191,7 +191,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clipArray:
-  - {fileID: 8300000, guid: bd62f6b8e3de2004692e760248d2281b, type: 3}
+  - {fileID: 8300000, guid: 486e476c551d1a240b2f1a9b9ede3d08, type: 3}
+  - {fileID: 8300000, guid: a275a36e31688fb4cb9af8e8db39ccc5, type: 3}
+  - {fileID: 8300000, guid: 2623af5c53ff1ac49a6a79e9aebf6034, type: 3}
+  - {fileID: 8300000, guid: 8be3f11b65a42c84198790ac376024da, type: 3}
+  - {fileID: 8300000, guid: dc01763ab68bf8a44ba6bb56b00b7af5, type: 3}
+  - {fileID: 8300000, guid: 3141ca578b6b47544a126cd1903b4829, type: 3}
+  - {fileID: 8300000, guid: 52ea13e588472634394eae83f068b861, type: 3}
 --- !u!198 &198381079419415344
 ParticleSystem:
   m_ObjectHideFlags: 1

@@ -89,7 +89,7 @@ public class EnemyCreature : MonoBehaviour {
         {
             transform.position += pushAwayDir * Time.deltaTime * pushAwaySpeed;
         }
-        else if(distanceToPlayer > 1.2)
+        else if(distanceToPlayer > 2.2)
         {
             if(!hitColumnSide)
             {

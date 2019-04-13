@@ -14,6 +14,7 @@ public class LaserPointer : MonoBehaviour
     public SteamVR_Action_Boolean shootAction;
     public SteamVR_Action_Vibration hapticAction;
 
+    public GameObject title;
     public LineRenderer laser;
     private Vector3 hitPoint;
 
@@ -67,11 +68,14 @@ public class LaserPointer : MonoBehaviour
         hand = Instantiate(handPrefab);
         grabLight = Instantiate(grabLightPrefab);
         grabLight.SetActive(false);
-        numSouls = 50;
+        numSouls = 5;
 
         soulRingParticles = soulRing.GetComponent<ParticleSystem>();
 
         audioSource = GetComponent<AudioSource>();
+
+        var emission = soulRingParticles.emission;
+        emission.rateOverTime = numSouls;
     }
 
     // Update is called once per frame
@@ -140,6 +144,10 @@ public class LaserPointer : MonoBehaviour
         if (shootAction.GetStateDown(handType))
         {
             Shoot();
+            if(title)
+            {
+                title.SetActive(false);
+            }
         }
 
         UpdateConnectionPoint();

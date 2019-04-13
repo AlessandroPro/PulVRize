@@ -17,9 +17,9 @@ public class HordeBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        maxEnemies = 40;
+        maxEnemies = 45;
         numEnemies = 0;
-        spawnRate = 0.5f;
+        spawnRate = 2.5f;
         
         StartCoroutine(SpawnEnemy());
 	}
@@ -28,6 +28,11 @@ public class HordeBehaviour : MonoBehaviour {
 	void Update ()
     {
         numEnemies = transform.childCount;
+        if(spawnRate > 0.5f)
+        {
+            spawnRate -= 0.1f * Time.deltaTime;
+        }
+        
 	}
 
     IEnumerator SpawnEnemy()

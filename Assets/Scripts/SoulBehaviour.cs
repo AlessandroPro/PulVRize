@@ -24,6 +24,10 @@ public class SoulBehaviour : MonoBehaviour {
         {
             targetPoint = target.position;
         }
+        else
+        {
+            Destroy(this.gameObject);
+        }
         transform.position += transform.forward * Time.deltaTime * forwardSpeed;
         Quaternion q = Quaternion.LookRotation(targetPoint - transform.position);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed * Time.deltaTime);

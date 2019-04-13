@@ -278,3 +278,8 @@ MonoBehaviour:
   verticalForce: {fileID: 75707209647179502}
   riseForce: {x: 0, y: 8, z: 0}
   fallForce: {x: 0, y: -15, z: 0}
+  movedBySource: {fileID: 0}
+  regularMat: {fileID: 0}
+  highlightMat: {fileID: 0}
+  dustPuffPrefab: {fileID: 0}
+  clipArray: []
