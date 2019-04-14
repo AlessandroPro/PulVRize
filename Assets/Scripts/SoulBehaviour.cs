@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SoulBehaviour : MonoBehaviour {
 
-    public Transform target;
+    private Transform target;
     private Vector3 targetPoint;
 
     private float forwardSpeed;
@@ -31,5 +31,15 @@ public class SoulBehaviour : MonoBehaviour {
         transform.position += transform.forward * Time.deltaTime * forwardSpeed;
         Quaternion q = Quaternion.LookRotation(targetPoint - transform.position);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, q, turnSpeed * Time.deltaTime);
+    }
+
+    public void SetSpeed(float speed)
+    {
+        forwardSpeed = speed;
+    }
+
+    public void SetTarget(Transform targetTransform)
+    {
+        target = targetTransform;
     }
 }

@@ -8,9 +8,9 @@ public class HordeBehaviour : MonoBehaviour {
     public int numEnemies;
     private float spawnRate;
 
-    //public GameObject redEnemyPrefab;
-    //public GameObject darkEnemyPrefab;
     public Transform playerPos;
+    public Player player;
+    public LayerMask lifeOrbMask;
 
     public GameObject[] enemyPrefabs;
 
@@ -44,12 +44,14 @@ public class HordeBehaviour : MonoBehaviour {
                 float randX = Random.Range(-20f, 20f);
                 float randY = Random.Range(0.4f, 3.03f);
                 Vector3 pos = new Vector3(randX, randY, 12);
-                Quaternion rot = Quaternion.identity;
 
                 int enemyType = Random.Range(0, enemyPrefabs.Length);
                 GameObject newEnemy = Instantiate(enemyPrefabs[enemyType], transform);
                 newEnemy.transform.position = pos;
-                newEnemy.GetComponent<EnemyCreature>().playerPos = playerPos;
+                EnemyCreature enemy = newEnemy.GetComponent<EnemyCreature>();
+                enemy.playerPos = playerPos;
+                enemy.player = player;
+                enemy.lifeOrbMask = lifeOrbMask;
             }
             yield return new WaitForSeconds(spawnRate);
         }

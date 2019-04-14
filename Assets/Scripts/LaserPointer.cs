@@ -35,6 +35,7 @@ public class LaserPointer : MonoBehaviour
     private Vector3 connectFromPoint;
     private Vector3 columnHitOffset;
 
+    public Player player;
     public LayerMask columnMask;
     public ColumnBehaviour selectedColumn;
     public ColumnBehaviour grabbedColumn;
@@ -43,7 +44,6 @@ public class LaserPointer : MonoBehaviour
 
     public LayerMask soulMask;
     private int numSouls;
-    private int numDefeated;
     public Text score;
 
     private AudioSource audioSource;
@@ -55,7 +55,6 @@ public class LaserPointer : MonoBehaviour
         laser.enabled = true;
         hitPoint = transform.forward * 100;
         handTime = 0;
-        numDefeated = 0;
 
         connectToPoint = transform.position;
 
@@ -85,14 +84,11 @@ public class LaserPointer : MonoBehaviour
 
         if (handType == SteamVR_Input_Sources.LeftHand)
         {
-            score.text = numDefeated.ToString();
+            score.text = player.GetNumDefeatedString();
         }
         else
         {
-            double minutes = Mathf.Floor(Time.time / 60);
-            double seconds = Time.time % 60;
-
-            score.text = System.Math.Round(minutes).ToString() + ":" + System.Math.Round(seconds).ToString();
+            score.text = player.GetTimeString();
         }
 
 
@@ -383,13 +379,13 @@ public class LaserPointer : MonoBehaviour
         var main = ps.main;
         main.stopAction = ParticleSystemStopAction.Destroy;
         numSouls++;
-        numDefeated++;
+        player.increaseNumDefeated(1);
 
         var emission = soulRingParticles.emission;
         emission.rateOverTime = numSouls;
     }
 
-    private void Pulse(float duration, float frequency, float amplitude)
+    public void Pulse(float duration, float frequency, float amplitude)
     {
         hapticAction.Execute(0, duration, frequency, amplitude, handType);
     }

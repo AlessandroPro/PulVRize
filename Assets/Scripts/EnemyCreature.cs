@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyCreature : MonoBehaviour {
+public class EnemyCreature : MonoBehaviour
+{
 
     public LayerMask columnMask;
     public LayerMask forceFieldMask;
+    public LayerMask lifeOrbMask;
     public GameObject explosionPrefab;
     public GameObject soulPrefab;
     public Transform playerPos;
+    public Player player;
     private Vector3 target;
     private Animator anim;
     public Rigidbody body;
@@ -24,14 +27,16 @@ public class EnemyCreature : MonoBehaviour {
 
     private bool pushedAway;
     private bool hitColumnSide;
+    private bool attackRecharge;
     private float pushAwaySpeed;
     private Vector3 pushAwayDir;
     private Vector3 pushHitpoint;
 
     private AudioSource audioSource;
     public AudioClip[] clipArray;
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         isDestroyed = false;
         speed = Random.Range(0.2f, 0.6f);
@@ -43,7 +48,7 @@ public class EnemyCreature : MonoBehaviour {
 
         anim = GetComponent<Animator>();
 
-        if(isLarge)
+        if (isLarge)
         {
             minHeight = 0.67f;
             maxHeight = 2.75f;
@@ -56,6 +61,7 @@ public class EnemyCreature : MonoBehaviour {
 
         pushedAway = false;
         hitColumnSide = false;
+        attackRecharge = false;
         pushAwaySpeed = 10f;
         pushAwayDir = Vector3.zero;
         pushHitpoint = Vector3.zero;
@@ -69,42 +75,43 @@ public class EnemyCreature : MonoBehaviour {
 
         audioSource = GetComponent<AudioSource>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         float distanceToPlayer = (playerPos.position - transform.position).magnitude;
 
-        if ( distanceToPlayer < 7)
+        if (distanceToPlayer < 7)
         {
             target = playerPos.position;
         }
 
-		if(stuckColumn)
+        Quaternion q = Quaternion.LookRotation(target - transform.position);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 30 * Time.deltaTime);
+
+        if (stuckColumn)
         {
             float yPos = stuckColumn.transform.position.y + yDiff;
             transform.position = new Vector3(transform.position.x, yPos, transform.position.z);
         }
-        else if(pushedAway)
+        else if (pushedAway)
         {
             transform.position += pushAwayDir * Time.deltaTime * pushAwaySpeed;
         }
-        else if(distanceToPlayer > 2.2)
+        else if (!hitColumnSide)
         {
-            if(!hitColumnSide)
+            if (distanceToPlayer > 2.2f)
             {
+                StopAnimAttack();
                 transform.position += transform.forward * Time.deltaTime * speed;
             }
-            Quaternion q = Quaternion.LookRotation(target - transform.position);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, q, 30 * Time.deltaTime);
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (null != anim)
+            else
             {
-                anim.SetBool("AttackMode", true);
+                StartAnimAttack();
+                if (!attackRecharge)
+                {
+                    StartCoroutine("Attack");
+                }
             }
         }
 
@@ -145,7 +152,7 @@ public class EnemyCreature : MonoBehaviour {
             audioSource.volume = (Random.Range(0.3f, .4f));
             audioSource.PlayDelayed(delay);
         }
-            
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -183,6 +190,11 @@ public class EnemyCreature : MonoBehaviour {
                 PlaySound(Random.Range(0, clipArray.Length + 5), 0);
             }
         }
+
+        if(((1 << other.gameObject.layer) & lifeOrbMask) != 0)
+        {
+            CollectLifeOrb(other.gameObject);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -199,8 +211,40 @@ public class EnemyCreature : MonoBehaviour {
     {
         Instantiate(explosionPrefab, transform.position, transform.rotation);
         GameObject soul = Instantiate(soulPrefab, transform.position, transform.rotation);
-        soul.GetComponent<SoulBehaviour>().target = soulTarget;
+        soul.GetComponent<SoulBehaviour>().SetTarget(soulTarget);
         isDestroyed = true;
         Destroy(this.gameObject);
+    }
+
+    private void StartAnimAttack()
+    {
+        if (null != anim)
+        {
+            anim.SetBool("AttackMode", true);
+        }
+    }
+
+    private void StopAnimAttack()
+    {
+        if (null != anim)
+        {
+            anim.SetBool("AttackMode", false);
+        }
+    }
+
+    IEnumerator Attack()
+    {
+        attackRecharge = true;
+        player.RemoveHealthPoint(transform);
+        yield return new WaitForSeconds(2);
+        attackRecharge = false;
+    }
+
+    private void CollectLifeOrb(GameObject lifeOrb)
+    {
+        var ps = lifeOrb.GetComponent<ParticleSystem>();
+        ps.Stop();
+        var main = ps.main;
+        main.stopAction = ParticleSystemStopAction.Destroy;
     }
 }
