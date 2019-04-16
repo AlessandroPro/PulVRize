@@ -10,7 +10,8 @@ public class HordeBehaviour : MonoBehaviour {
 
     public Transform playerPos;
     public Player player;
-    public LayerMask lifeOrbMask;
+
+    private bool started;
 
     public GameObject[] enemyPrefabs;
 
@@ -20,15 +21,13 @@ public class HordeBehaviour : MonoBehaviour {
         maxEnemies = 45;
         numEnemies = 0;
         spawnRate = 2.5f;
-        
-        StartCoroutine(SpawnEnemy());
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
         numEnemies = transform.childCount;
-        if(spawnRate > 0.5f)
+        if(spawnRate > 0.5f && started)
         {
             spawnRate -= 0.1f * Time.deltaTime;
         }
@@ -43,7 +42,7 @@ public class HordeBehaviour : MonoBehaviour {
             {
                 float randX = Random.Range(-20f, 20f);
                 float randY = Random.Range(0.4f, 3.03f);
-                Vector3 pos = new Vector3(randX, randY, 12);
+                Vector3 pos = new Vector3(randX, randY, 9);
 
                 int enemyType = Random.Range(0, enemyPrefabs.Length);
                 GameObject newEnemy = Instantiate(enemyPrefabs[enemyType], transform);
@@ -51,9 +50,14 @@ public class HordeBehaviour : MonoBehaviour {
                 EnemyCreature enemy = newEnemy.GetComponent<EnemyCreature>();
                 enemy.playerPos = playerPos;
                 enemy.player = player;
-                enemy.lifeOrbMask = lifeOrbMask;
             }
             yield return new WaitForSeconds(spawnRate);
         }
+    }
+
+    public void StartHorde()
+    {
+        StartCoroutine(SpawnEnemy());
+        started = true;
     }
 }

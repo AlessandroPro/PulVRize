@@ -937,9 +937,6 @@ MonoBehaviour:
   forceFieldMask:
     serializedVersion: 2
     m_Bits: 1024
-  lifeOrbMask:
-    serializedVersion: 2
-    m_Bits: 0
   explosionPrefab: {fileID: 1220623748056708, guid: cde0d95941d449c4ba42df6139279acc,
     type: 2}
   soulPrefab: {fileID: 1727074340529764, guid: 54b3f57b45ea78c41bb4f4b8bcc9ac30, type: 2}
@@ -958,6 +955,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 3141ca578b6b47544a126cd1903b4829, type: 3}
   - {fileID: 8300000, guid: dc01763ab68bf8a44ba6bb56b00b7af5, type: 3}
   - {fileID: 8300000, guid: 52ea13e588472634394eae83f068b861, type: 3}
+  damageIndicatorPrefab: {fileID: 1618101594760090, guid: 4bc83d169597c7a4298e73e88159cdad,
+    type: 2}
 --- !u!135 &135942408983760558
 SphereCollider:
   m_ObjectHideFlags: 1

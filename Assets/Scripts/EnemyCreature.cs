@@ -7,7 +7,6 @@ public class EnemyCreature : MonoBehaviour
 
     public LayerMask columnMask;
     public LayerMask forceFieldMask;
-    public LayerMask lifeOrbMask;
     public GameObject explosionPrefab;
     public GameObject soulPrefab;
     public Transform playerPos;
@@ -35,12 +34,15 @@ public class EnemyCreature : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip[] clipArray;
 
+    public GameObject damageIndicatorPrefab;
+    private GameObject damageIndicator;
+
     // Use this for initialization
     void Start()
     {
         isDestroyed = false;
         speed = Random.Range(0.2f, 0.6f);
-
+        //speed = Random.Range(2f, 10f);
         float targetX = playerPos.position.x + Random.Range(-5, 5);
         float targetY = playerPos.position.y + Random.Range(0, 3f);
         float targetZ = playerPos.position.z + Random.Range(-3, 3);
@@ -74,6 +76,8 @@ public class EnemyCreature : MonoBehaviour
         }
 
         audioSource = GetComponent<AudioSource>();
+        damageIndicator = Instantiate(damageIndicatorPrefab);
+        damageIndicator.SetActive(false);
     }
 
     // Update is called once per frame
@@ -104,6 +108,7 @@ public class EnemyCreature : MonoBehaviour
             {
                 StopAnimAttack();
                 transform.position += transform.forward * Time.deltaTime * speed;
+                damageIndicator.SetActive(false);
             }
             else
             {
@@ -112,6 +117,7 @@ public class EnemyCreature : MonoBehaviour
                 {
                     StartCoroutine("Attack");
                 }
+                UpdateDamageIndicator();
             }
         }
 
@@ -120,12 +126,12 @@ public class EnemyCreature : MonoBehaviour
             if (transform.position.y > maxHeight)
             {
                 transform.position = new Vector3(transform.position.x, maxHeight, transform.position.z);
-                pushedAway = false;
+                //pushedAway = false;
             }
             else if (transform.position.y < minHeight)
             {
                 transform.position = new Vector3(transform.position.x, minHeight, transform.position.z);
-                pushedAway = false;
+                //pushedAway = false;
             }
         }
 
@@ -190,11 +196,6 @@ public class EnemyCreature : MonoBehaviour
                 PlaySound(Random.Range(0, clipArray.Length + 5), 0);
             }
         }
-
-        if(((1 << other.gameObject.layer) & lifeOrbMask) != 0)
-        {
-            CollectLifeOrb(other.gameObject);
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -213,6 +214,7 @@ public class EnemyCreature : MonoBehaviour
         GameObject soul = Instantiate(soulPrefab, transform.position, transform.rotation);
         soul.GetComponent<SoulBehaviour>().SetTarget(soulTarget);
         isDestroyed = true;
+        Destroy(damageIndicator);
         Destroy(this.gameObject);
     }
 
@@ -240,11 +242,21 @@ public class EnemyCreature : MonoBehaviour
         attackRecharge = false;
     }
 
-    private void CollectLifeOrb(GameObject lifeOrb)
+    private void UpdateDamageIndicator()
     {
-        var ps = lifeOrb.GetComponent<ParticleSystem>();
-        ps.Stop();
-        var main = ps.main;
-        main.stopAction = ParticleSystemStopAction.Destroy;
+        Vector3 center = playerPos.position + (playerPos.forward * 0.3f);
+        Vector3 diff = playerPos.InverseTransformDirection(transform.position - center);
+        diff = new Vector3(diff.x, diff.y, 0);
+        diff.Normalize();
+        damageIndicator.transform.position = center + playerPos.TransformDirection(diff * 0.1f);
+        damageIndicator.transform.LookAt(transform.position);
+        if (Vector3.Angle(diff, playerPos.forward) < 100)
+        {
+            damageIndicator.SetActive(false);
+        }
+        else
+        {
+            damageIndicator.SetActive(true);
+        }
     }
 }

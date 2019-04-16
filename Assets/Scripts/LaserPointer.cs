@@ -49,6 +49,9 @@ public class LaserPointer : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip[] clipArray;
 
+    public LayerMask menuMask;
+    public MenuUI menu;
+
     // Use this for initialization
     void Start()
     {
@@ -138,12 +141,9 @@ public class LaserPointer : MonoBehaviour
         }
 
         if (shootAction.GetStateDown(handType))
-        {
+        {        
             Shoot();
-            if(title)
-            {
-                title.SetActive(false);
-            }
+            menu.HandleTrigger();
         }
 
         UpdateConnectionPoint();
@@ -151,8 +151,6 @@ public class LaserPointer : MonoBehaviour
         UpdateConnectionLine();
         handTime += Time.deltaTime * 5f;
         grabLight.transform.position = hand.transform.position;
-
-
     }
 
     private void PlaySound(int clipIndex, float delay)
