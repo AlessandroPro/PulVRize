@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 54414821990871022}
   m_Layer: 11
   m_Name: Soul
-  m_TagString: Untagged
+  m_TagString: Particle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,7 +113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3218d7c867ed9a74997802a444ffa7f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!135 &135174823394841740
 SphereCollider:
   m_ObjectHideFlags: 1

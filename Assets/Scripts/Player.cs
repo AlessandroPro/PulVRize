@@ -7,8 +7,8 @@ using Valve.VR;
 
 public class Player : MonoBehaviour {
 
-    private int numDefeated;
-    private float timeAlive;
+    public int numDefeated;
+    public float timeAlive;
     private int healthPoints;
     private int totalhealthPoints;
     private bool isDead;
@@ -20,19 +20,26 @@ public class Player : MonoBehaviour {
 
     public MenuUI menu;
 
+    private AudioSource audioSource;
+
     // Use this for initialization
     void Start ()
     {
         numDefeated = 0;
         timeAlive = 0;
-        healthPoints = 10;
+        healthPoints = 70;
         totalhealthPoints = healthPoints;
+        audioSource = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        timeAlive += Time.deltaTime;
+        if(menu.invalid)
+        {
+            timeAlive += Time.deltaTime;
+        }
+        
 
         if(healthPoints <= 0 && !isDead)
         {
@@ -55,7 +62,14 @@ public class Player : MonoBehaviour {
         double minutes = Mathf.Floor(timeAlive / 60);
         double seconds = timeAlive % 60;
 
-        return System.Math.Round(minutes).ToString() + ":" + System.Math.Round(seconds).ToString();
+        string minutesString = System.Math.Round(minutes).ToString();
+        string secondsString = System.Math.Round(seconds).ToString();
+
+        if(System.Math.Round(seconds) < 10)
+        {
+            secondsString = "0" + secondsString;
+        }
+        return minutesString + ":" + secondsString;
     }
 
     public void RemoveHealthPoint(Transform enemyTransform)
@@ -63,6 +77,7 @@ public class Player : MonoBehaviour {
         GameObject orb = Instantiate(lifeOrbPrefab, transform.position, transform.rotation);
         LifeOrbBehaviour lifeOrb = orb.GetComponent<LifeOrbBehaviour>();
         lifeOrb.SetTarget(enemyTransform);
+        lifeOrb.SetSource(transform);
         lifeOrb.SetSpeed(1);
         healthPoints--;
         if(healthPoints < 0)
@@ -75,6 +90,10 @@ public class Player : MonoBehaviour {
     public void Die()
     {
         isDead = true;
+        audioSource.Play();
+        leftHand.RemoveAllSouls();
+        rightHand.RemoveAllSouls();
+
         StartCoroutine(ScreenFade());
     }
 
@@ -83,12 +102,13 @@ public class Player : MonoBehaviour {
     {
         SteamVR_Fade.Start(Color.black, 2f);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
 
         menu.gameObject.SetActive(true);
-        menu.EndGame(GetNumDefeatedString(), GetTimeString(), 5);
+        int finalScore = numDefeated + (int) Mathf.Pow(timeAlive, 1.1f);
+        menu.EndGame(GetNumDefeatedString(), GetTimeString(), finalScore);
 
-        SteamVR_Fade.Start(Color.clear, 0.4f);
+        SteamVR_Fade.Start(Color.clear, 0.6f);
 
     }
 }

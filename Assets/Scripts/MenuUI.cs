@@ -11,9 +11,11 @@ public class MenuUI : MonoBehaviour {
     public GameObject columnPairs;
     public CanvasGroup canvasGroup;
     public Image logo;
+    public Image helpPage;
 
     public Text start;
     public Text help;
+    public Text restart;
 
     public Text gameOver;
     public Text score;
@@ -23,35 +25,20 @@ public class MenuUI : MonoBehaviour {
     private Color defaultColour;
 
     public bool invalid;
+    public bool gameEnded;
   
 
 	// Use this for initialization
 	void Start () {
         defaultColour = start.color;
         invalid = false;
+        gameEnded = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-
-    public void HighlightText(Text text)
-    {
-        if(text = start)
-        {
-            start.color = Color.red;
-            help.color = defaultColour;
-            selectedButton = start;
-        }
-        else if(text = help)
-        {
-            help.color = Color.red;
-            start.color = defaultColour;
-            selectedButton = help;
-            ShowHelp();
-        }
-    }
 
     public void RemoveTextHighlights()
     {
@@ -68,11 +55,6 @@ public class MenuUI : MonoBehaviour {
             invalid = true;
             StartCoroutine("FadeOut");
         }
-    }
-
-    public void ShowHelp()
-    {
-
     }
 
     public void StartGame()
@@ -99,7 +81,7 @@ public class MenuUI : MonoBehaviour {
     {
         while (canvasGroup.alpha <= 1)
         {
-            canvasGroup.alpha += Time.deltaTime;
+            canvasGroup.alpha += Time.deltaTime / 2;
             yield return new WaitForEndOfFrame();
         }
         invalid = false;
@@ -107,9 +89,24 @@ public class MenuUI : MonoBehaviour {
 
     public void HandleTrigger()
     {
+        if (!gameEnded && !invalid)
+        {
+            if(helpPage.gameObject.activeSelf)
+            {
+                helpPage.gameObject.SetActive(false);
+            }
+            else
+            {
+                helpPage.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void HandleGripDown()
+    {
         if (!invalid)
         {
-            if(logo.isActiveAndEnabled)
+            if (!gameEnded)
             {
                 StartGame();
             }
@@ -119,18 +116,34 @@ public class MenuUI : MonoBehaviour {
             }
         }
     }
+
+
     public void EndGame(string numDefeated, string survivalTime, int finalScore)
     {
+        gameEnded = true;
+
         horde.gameObject.SetActive(false);
         columnPairs.SetActive(false);
+
+        GameObject[] particleObjs = GameObject.FindGameObjectsWithTag("Particle");
+        foreach(GameObject particle in particleObjs)
+        {
+            if(particle)
+            {
+                Destroy(particle);
+            }
+        }
 
         gameOver.gameObject.SetActive(true);
         forceField.SetActive(false);
         logo.gameObject.SetActive(false);
         help.gameObject.SetActive(false);
+        helpPage.gameObject.SetActive(false);
+        start.gameObject.SetActive(false);
         score.gameObject.SetActive(true);
-        score.text = "numDefeated: " + numDefeated + "\n" + "survivalTime: " + survivalTime;
-        start.text = "Press the TRIGGER to restart";
+        //restart.gameObject.SetActive(true);
+        score.text = "Creatures Defeated:      " + numDefeated + "\n" + "Minutes Survived:        " + survivalTime + "\n\n\n";
+        score.text = "FINAL SCORE:\n" + finalScore.ToString();
         StartCoroutine("FadeIn");
     }
 }

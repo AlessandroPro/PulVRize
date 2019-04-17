@@ -7,13 +7,16 @@ public class LifeOrbBehaviour : SoulBehaviour {
 
     private bool stopped;
     public Gradient gradient;
+    public Transform source;
 
 	
 	// Update is called once per frame
 	public override void Update () {
         base.Update();
 
-        if(!stopped && (targetPoint - transform.position).magnitude < 0.1f)
+        float distanceToTarget = (targetPoint - transform.position).magnitude;
+        float distanceFromPlayer = (transform.position - source.position).magnitude;
+        if (!stopped && (distanceToTarget < 0.1f || distanceFromPlayer > 3.5f))
         {
             StopMoving();
             StartCoroutine("WaitThenDie");
@@ -30,6 +33,11 @@ public class LifeOrbBehaviour : SoulBehaviour {
         ps.Stop();
         var main = ps.main;
         main.stopAction = ParticleSystemStopAction.Destroy;
+    }
+
+    public void SetSource(Transform sourceTransform)
+    {
+        source = sourceTransform;
     }
 
     public void SetNewGradient(float percent)

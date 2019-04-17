@@ -41,8 +41,6 @@ public class EnemyCreature : MonoBehaviour
     void Start()
     {
         isDestroyed = false;
-        speed = Random.Range(0.2f, 0.6f);
-        //speed = Random.Range(2f, 10f);
         float targetX = playerPos.position.x + Random.Range(-5, 5);
         float targetY = playerPos.position.y + Random.Range(0, 3f);
         float targetZ = playerPos.position.z + Random.Range(-3, 3);
@@ -234,6 +232,11 @@ public class EnemyCreature : MonoBehaviour
         }
     }
 
+    public void SetSpeed(float givenSpeed)
+    {
+        speed = givenSpeed;
+    }
+
     IEnumerator Attack()
     {
         attackRecharge = true;
@@ -249,7 +252,7 @@ public class EnemyCreature : MonoBehaviour
         diff = new Vector3(diff.x, diff.y, 0);
         diff.Normalize();
         damageIndicator.transform.position = center + playerPos.TransformDirection(diff * 0.1f);
-        damageIndicator.transform.LookAt(transform.position);
+        damageIndicator.transform.LookAt(center + ((damageIndicator.transform.position - center) * 2));
         if (Vector3.Angle(diff, playerPos.forward) < 100)
         {
             damageIndicator.SetActive(false);

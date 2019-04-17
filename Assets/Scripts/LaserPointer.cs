@@ -12,6 +12,7 @@ public class LaserPointer : MonoBehaviour
     public SteamVR_Behaviour_Pose controllerPose;
     public SteamVR_Action_Boolean grabAction;
     public SteamVR_Action_Boolean shootAction;
+    public SteamVR_Action_Boolean gripAction;
     public SteamVR_Action_Vibration hapticAction;
 
     public GameObject title;
@@ -44,6 +45,7 @@ public class LaserPointer : MonoBehaviour
 
     public LayerMask soulMask;
     private int numSouls;
+    private int maxSouls;
     public Text score;
 
     private AudioSource audioSource;
@@ -58,6 +60,7 @@ public class LaserPointer : MonoBehaviour
         laser.enabled = true;
         hitPoint = transform.forward * 100;
         handTime = 0;
+        maxSouls = 20;
 
         connectToPoint = transform.position;
 
@@ -70,7 +73,7 @@ public class LaserPointer : MonoBehaviour
         hand = Instantiate(handPrefab);
         grabLight = Instantiate(grabLightPrefab);
         grabLight.SetActive(false);
-        numSouls = 5;
+        numSouls = 4;
 
         soulRingParticles = soulRing.GetComponent<ParticleSystem>();
 
@@ -143,7 +146,19 @@ public class LaserPointer : MonoBehaviour
         if (shootAction.GetStateDown(handType))
         {        
             Shoot();
-            menu.HandleTrigger();
+        }
+
+        // Menu input when the menu is valid
+        if(!menu.invalid)
+        {
+            if (shootAction.GetStateDown(handType))
+            {
+                menu.HandleTrigger();
+            }
+            else if(gripAction.GetStateDown(handType))
+            {
+                menu.HandleGripDown();
+            }
         }
 
         UpdateConnectionPoint();
@@ -378,6 +393,18 @@ public class LaserPointer : MonoBehaviour
         main.stopAction = ParticleSystemStopAction.Destroy;
         numSouls++;
         player.increaseNumDefeated(1);
+
+        if(numSouls > maxSouls)
+        {
+            numSouls = maxSouls;
+        }
+        var emission = soulRingParticles.emission;
+        emission.rateOverTime = numSouls;
+    }
+
+    public void RemoveAllSouls()
+    {
+        numSouls = 0;
 
         var emission = soulRingParticles.emission;
         emission.rateOverTime = numSouls;
