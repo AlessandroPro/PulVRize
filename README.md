@@ -5,7 +5,8 @@ Semi-finalist in Best Gameplay at Level Up 2019 <br>
 Trailer: https://www.youtube.com/watch?v=PvLaZvu0beI <br>
 Gameplay video: https://www.youtube.com/watch?v=3j0KoOLg3ck <br>
 
-The name is multi-pun, since the game involves pulling, rising, VR, and pulverizing monsters.
+The name is multi-pun, since the game involves pulling, rising, VR, and pulverizing monsters. <br>
+All relevant code is in /Assets/Scripts/.
 
 ![logoFINAL3](https://user-images.githubusercontent.com/15040875/72230574-6a15f300-3584-11ea-9139-647e67d2ad88.png)
 
