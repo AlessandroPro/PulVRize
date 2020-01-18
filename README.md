@@ -1,6 +1,6 @@
 # PulVRize
 
-Semi-finalist in Best Gameplay at Level Up 2019 <br>
+Semi-finalist in Best Gameplay at Level Up Showcase 2019. <br>
 
 Trailer: https://www.youtube.com/watch?v=PvLaZvu0beI <br>
 Gameplay video: https://www.youtube.com/watch?v=3j0KoOLg3ck <br>
